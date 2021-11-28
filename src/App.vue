@@ -1,8 +1,8 @@
 <template>
-  <div id="nav">
+  <!-- <div id="nav">
     <router-link to="/">Home</router-link> |
     <router-link to="/about">About</router-link>
-  </div>
+  </div> -->
   <router-view/>
 </template>
 
@@ -15,16 +15,30 @@
   color: #2c3e50;
 }
 
-#nav {
-  padding: 30px;
+.blink {
+  animation:1s blinker linear infinite;
+  -webkit-animation:1s blinker linear infinite;
+  -moz-animation:1s blinker linear infinite;
 }
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
+@-moz-keyframes blinker
+{
+    0% { opacity: 1.0; }
+    50% { opacity: 0.2; }
+    100% { opacity: 1.0; }
 }
 
-#nav a.router-link-exact-active {
-  color: #42b983;
+@-webkit-keyframes blinker
+{
+    0% { opacity: 1.0; }
+    50% { opacity: 0.2; }
+    100% { opacity: 1.0; }
+}
+
+@keyframes blinker
+{
+    0% { opacity: 1.0; }
+    50% { opacity: 0.2; }
+    100% { opacity: 1.0; }
 }
 </style>
