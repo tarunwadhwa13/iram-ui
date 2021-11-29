@@ -75,7 +75,7 @@ export default class AlertsTable extends Vue {
       },
       {
         source: 'SLA Zabbix New',
-        time: '2021-11-27 10:36PM',
+        time: '2021-11-27 10:38PM',
         age: '5m',
         priority: 'P1',
         entity: 'New host 2',
@@ -122,6 +122,9 @@ export default class AlertsTable extends Vue {
 }
 .el-table .el-table__cell {
   font-weight: 650;
+}
+.el-table {
+  --el-table-border-color: var(--el-table-border-color-base)
 }
 
 </style>
