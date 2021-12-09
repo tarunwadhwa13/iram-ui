@@ -4,7 +4,7 @@
             Alert Monitoring Platform
         </el-col>
         <el-col class="userOptions" :span="4">
-            <el-icon :size="30" style="border:1px solid white"><user-filled /></el-icon>
+            Hello Tarun!
         </el-col>
     </el-row>
 </template>
@@ -26,11 +26,11 @@ export default class Navbar extends Vue {
 .amp-navbar {
   background-color: #545c64;
   color: white;
-  height: 60px;
-  font-size: 180%;
+  height: 50px;
+  font-size: 125%;
   text-align: left;
   display: flex;
-  padding: 0 20px;
+  padding: 0 10px;
   align-items: center;
 }
 

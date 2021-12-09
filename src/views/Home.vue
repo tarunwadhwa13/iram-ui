@@ -1,18 +1,16 @@
 <template>
   <div class="home">
     <Navbar/>
-    <el-row :gutter="10">
-      <el-col :span="1">
+    <el-container>
+      <el-aside width="50px">
         <Sidebar/>
-      </el-col>
-      <el-col :span="23">
+      </el-aside>
+      <el-main>
         <InfoCards/>
         <br/>
         <AlertsTable/>
-      </el-col>
-      <el-col>
-      </el-col>
-    </el-row>
+      </el-main>
+    </el-container>
   </div>
 </template>
 

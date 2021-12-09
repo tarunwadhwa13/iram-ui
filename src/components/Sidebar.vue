@@ -7,16 +7,73 @@
         active-text-color="#ffd04b"
         @select="context.handleSelect"
     >
-        <el-menu-item index="1">P1</el-menu-item>
+        <el-menu-item index="1">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="Home"
+            placement="right-start"
+          >
+          <router-link class="link" :to="{name: 'Home'}">
+            <font-awesome-icon :icon="homeIcon" size="lg"/>
+          </router-link>
+          </el-tooltip>
+        </el-menu-item>
+        <el-menu-item index="2">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="Past Alerts"
+            placement="right-start"
+          >
+          <router-link class="link" :to="{name: 'PastAlerts'}">
+            <font-awesome-icon :icon="pastAlertsIcon" size="lg"/>
+          </router-link>
+          </el-tooltip>
+        </el-menu-item>
+        <el-menu-item index="3">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="Configure"
+            placement="right-start"
+          >
+          <router-link class="link" :to="{name: 'Configure'}">
+            <font-awesome-icon :icon="configureIcon" size="lg"/>
+          </router-link>
+          </el-tooltip>
+        </el-menu-item>
+        <el-menu-item index="4">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="Logout"
+            placement="right-start"
+          >
+          <font-awesome-icon :icon="logOutIcon" size="lg"/>
+          </el-tooltip>
+        </el-menu-item>
     </el-menu>
 </template>
 
 <script lang="ts">
 import { Options, Vue, setup } from 'vue-class-component'
 import { ref } from 'vue'
+import { Clock, HomeFilled, Setting } from '@element-plus/icons'
+import { faSignOutAlt, faHistory, faCogs, faHome } from '@fortawesome/free-solid-svg-icons'
 
-@Options({})
+@Options({
+  components: {
+    Clock,
+    HomeFilled,
+    Setting
+  }
+})
 export default class Sidebar extends Vue {
+    pastAlertsIcon = faHistory
+    logOutIcon = faSignOutAlt
+    configureIcon = faCogs
+    homeIcon = faHome
     context = setup(() => {
       const activeIndex = ref('1')
       const handleSelect = (key: any, keyPath: any) => {
@@ -32,6 +89,20 @@ export default class Sidebar extends Vue {
 
 <style scoped>
 .amp-sidebar {
-  min-height: 100vh;
+  min-height: 95vh;
+  max-width: 50px;
+}
+
+.el-menu-item {
+  justify-content: center;
+}
+
+.link {
+ text-decoration: none;
+ color: inherit;
+}
+
+li.el-menu-item {
+  padding: 0 !important;
 }
 </style>

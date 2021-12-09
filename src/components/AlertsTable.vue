@@ -1,8 +1,10 @@
 <template>
+  <el-alert v-if="showErrorAlert" :title="alertMsg" type="error" close-text="Gotcha" center show-icon effect="dark">
+  </el-alert>
   <el-table
     ref="multipleTable"
     border
-     v-loading="context.loading"
+    v-loading="$apollo.loading"
     element-loading-text="Loading..."
     :element-loading-spinner="context.svg"
     element-loading-svg-view-box="-10, -10, 50, 50"
@@ -26,7 +28,11 @@
     <el-table-column prop="entity" label="Entity" />
     <el-table-column prop="subject" label="Subject" />
     <el-table-column prop="status" label="Status" sortable />
+    <el-table-column label="Action">
+      <el-button type="danger"  size="mini" @click="showDetailModal = true">Show Details</el-button>
+      <el-button type="danger"  size="mini" @click="showAssignModal = true">Assign</el-button>
 
+    </el-table-column>
     <!-- <el-table-column align="right">
       <template #header>
         <el-input v-model="context.search" size="mini" placeholder="Type to search" />
@@ -40,13 +46,28 @@
 
 import { Options, Vue, setup } from 'vue-class-component'
 import { reactive, toRefs } from 'vue'
+import gql from 'graphql-tag'
 
-@Options({})
+@Options({
+  apollo: {
+    tableData: {
+      query: gql`query {
+        active_alerts
+      }`,
+      error (_) {
+        this.showErrorAlert = true
+        this.alertMsg = 'Error making Graphql Query'
+      }
+    }
+  }
+})
 export default class AlertsTable extends Vue {
+  showErrorAlert = false
+  alertMsg = ''
   context = setup(() => {
     const state = reactive({
       tableData: [] as any,
-      loading: true,
+      showDetailModal: false,
       search: '',
       svg: `
         <path class="path" d="
@@ -62,30 +83,28 @@ export default class AlertsTable extends Vue {
     return toRefs(state)
   })
 
-  created () {
-    this.context.tableData = [
-      {
-        source: 'SLA Zabbix New',
-        time: '2021-11-27 10:36PM',
-        age: '2m',
-        priority: 'P0',
-        entity: 'New host 1',
-        subject: 'Test alert 1',
-        status: 'New'
-      },
-      {
-        source: 'SLA Zabbix New',
-        time: '2021-11-27 10:38PM',
-        age: '5m',
-        priority: 'P1',
-        entity: 'New host 2',
-        subject: 'Test alert 2',
-        status: 'Realarmed'
-      }
-    ]
-
-    this.context.loading = false
-  }
+  // created () {
+  //   this.context.tableData = [
+  //     {
+  //       source: 'SLA Zabbix New',
+  //       time: '2021-11-27 10:36PM',
+  //       age: '2m',
+  //       priority: 'P0',
+  //       entity: 'New host 1',
+  //       subject: 'Test alert 1',
+  //       status: 'New'
+  //     },
+  //     {
+  //       source: 'SLA Zabbix New',
+  //       time: '2021-11-27 10:38PM',
+  //       age: '5m',
+  //       priority: 'P1',
+  //       entity: 'New host 2',
+  //       subject: 'Test alert 2',
+  //       status: 'Realarmed'
+  //     }
+  //   ]
+  // }
 
   tableRowClassName ({ row, _rowIndex }: { row: any, _rowIndex: number }):string {
     if (row.status.toLowerCase() === 'realarmed') {
