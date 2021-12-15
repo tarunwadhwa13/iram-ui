@@ -4,7 +4,7 @@
             Alert Monitoring Platform
         </el-col>
         <el-col class="userOptions" :span="4">
-            Hello Tarun!
+            Hello {{ username }} !
         </el-col>
     </el-row>
 </template>
@@ -19,6 +19,7 @@ import { UserFilled } from '@element-plus/icons'
   }
 })
 export default class Navbar extends Vue {
+  username = 'Tarun'
 }
 </script>
 
@@ -27,7 +28,8 @@ export default class Navbar extends Vue {
   background-color: #545c64;
   color: white;
   height: 50px;
-  font-size: 125%;
+  font-size: 130%;
+  font-weight: bold;
   text-align: left;
   display: flex;
   padding: 0 10px;

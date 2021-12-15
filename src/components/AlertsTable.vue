@@ -1,15 +1,15 @@
 <template>
-  <el-alert v-if="showErrorAlert" :title="alertMsg" type="error" close-text="Gotcha" center show-icon effect="dark">
+  <el-alert v-if="context.error" title="Snap :( Something went wrong and we couldn't fetch data" type="error" close-text="Gotcha" center show-icon effect="dark">
   </el-alert>
   <el-table
     ref="multipleTable"
     border
-    v-loading="$apollo.loading"
+    v-loading="context.loading"
     element-loading-text="Loading..."
     :element-loading-spinner="context.svg"
     element-loading-svg-view-box="-10, -10, 50, 50"
     element-loading-background="rgba(0, 0, 0, 0.8)"
-    :data="context.tableData.filter(
+    :data="context.activeAlerts.filter(
         (data) =>
           !context.search
             || data.source.toLowerCase().includes(search.toLowerCase())
@@ -21,15 +21,16 @@
     :row-class-name="tableRowClassName"
   >
 
-    <el-table-column prop="source" label="Source" />
-    <el-table-column prop="time" label="Time" sortable/>
-    <el-table-column prop="age" label="Age" />
-    <el-table-column prop="priority" label="Priority" sortable/>
-    <el-table-column prop="entity" label="Entity" />
+    <el-table-column prop="source" label="Source" width="150"/>
+    <el-table-column prop="createdAt" label="Started At" sortable width="180"/>
+    <el-table-column prop="lastUpdated" label="Last Updated" sortable width="180"/>
+    <el-table-column prop="age" label="Age" width="80" />
+    <el-table-column prop="priority" label="Priority" sortable width="100" />
+    <el-table-column prop="entity" label="Entity" width="250" />
     <el-table-column prop="subject" label="Subject" />
-    <el-table-column prop="status" label="Status" sortable />
-    <el-table-column label="Action">
-      <el-button type="danger"  size="mini" @click="showDetailModal = true">Show Details</el-button>
+    <el-table-column prop="status" label="Status" sortable width="100"/>
+    <el-table-column label="Action" width="180">
+      <el-button type="danger"  size="mini" @click="showDetailModal = true">Details</el-button>
       <el-button type="danger"  size="mini" @click="showAssignModal = true">Assign</el-button>
 
     </el-table-column>
@@ -45,28 +46,32 @@
 <script lang="ts">
 
 import { Options, Vue, setup } from 'vue-class-component'
-import { reactive, toRefs } from 'vue'
+import { reactive, toRefs, watch } from 'vue'
 import gql from 'graphql-tag'
+import { useQuery, useResult } from '@vue/apollo-composable'
 
-@Options({
-  apollo: {
-    tableData: {
-      query: gql`query {
-        active_alerts
-      }`,
-      error (_) {
-        this.showErrorAlert = true
-        this.alertMsg = 'Error making Graphql Query'
-      }
-    }
-  }
-})
+@Options({})
 export default class AlertsTable extends Vue {
   showErrorAlert = false
   alertMsg = ''
   context = setup(() => {
-    const state = reactive({
-      tableData: [] as any,
+    const { result, loading, error } = useQuery(gql`query {
+        activeAlerts {
+          source,
+          createdAt,
+          lastUpdated,
+          age,
+          priority,
+          entity,
+          subject,
+          status
+        }
+      }`)
+    const activeAlerts = useResult(result, [], data => data.activeAlerts)
+    watch(result, value => {
+      console.log(value)
+    })
+    const dynProps = reactive({
       showDetailModal: false,
       search: '',
       svg: `
@@ -80,31 +85,8 @@ export default class AlertsTable extends Vue {
         " style="stroke-width: 4px; fill: rgba(0, 0, 0, 0)"/>
       `
     })
-    return toRefs(state)
+    return { dynProps: toRefs(dynProps), activeAlerts: activeAlerts, loading: loading, error: error }
   })
-
-  // created () {
-  //   this.context.tableData = [
-  //     {
-  //       source: 'SLA Zabbix New',
-  //       time: '2021-11-27 10:36PM',
-  //       age: '2m',
-  //       priority: 'P0',
-  //       entity: 'New host 1',
-  //       subject: 'Test alert 1',
-  //       status: 'New'
-  //     },
-  //     {
-  //       source: 'SLA Zabbix New',
-  //       time: '2021-11-27 10:38PM',
-  //       age: '5m',
-  //       priority: 'P1',
-  //       entity: 'New host 2',
-  //       subject: 'Test alert 2',
-  //       status: 'Realarmed'
-  //     }
-  //   ]
-  // }
 
   tableRowClassName ({ row, _rowIndex }: { row: any, _rowIndex: number }):string {
     if (row.status.toLowerCase() === 'realarmed') {

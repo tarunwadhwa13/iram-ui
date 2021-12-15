@@ -16,6 +16,11 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import(/* webpackChunkName: "authentication" */ '../views/Authentication.vue')
   },
   {
+    path: '/account/reset-password/',
+    name: 'ResetPassword',
+    component: Home
+  },
+  {
     path: '/console/review/',
     name: 'PastAlerts',
     component: Home
@@ -23,6 +28,26 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/console/configure/',
     name: 'Configure',
+    component: () => import(/* webpackChunkName: "configurehome" */ '../views/ConfigureHome.vue')
+  },
+  {
+    path: '/console/alert-source/add/',
+    name: 'AddNewAlertSource',
+    component: Home
+  },
+  {
+    path: '/console/alert-sources/',
+    name: 'ManageAlertSource',
+    component: Home
+  },
+  {
+    path: '/console/users/',
+    name: 'ManageUsers',
+    component: Home
+  },
+  {
+    path: '/console/configure/extras/',
+    name: 'OtherAppSettings',
     component: Home
   }
 ]

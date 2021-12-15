@@ -95,6 +95,7 @@ export default class Sidebar extends Vue {
 
 .el-menu-item {
   justify-content: center;
+  align-items: center;
 }
 
 .link {
@@ -103,6 +104,6 @@ export default class Sidebar extends Vue {
 }
 
 li.el-menu-item {
-  padding: 0 !important;
+  padding: 30px 0 50px 0 !important;
 }
 </style>

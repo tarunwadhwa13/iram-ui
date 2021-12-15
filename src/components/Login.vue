@@ -32,7 +32,7 @@
       <el-form-item>
         <div class="extraOptions">
           <el-checkbox v-model="rememberMe" label="Remember me?"></el-checkbox>
-          <el-link href="/#/account/reset-password" target="_blank" :underline="false" >Forgot Password?</el-link>
+          <router-link class="link" :to="{name: 'ResetPassword' }" target="_blank" >Forgot Password?</router-link>
         </div>
       </el-form-item>
       <el-form-item>
@@ -120,6 +120,11 @@ export default class Login extends Vue {
   font-weight: bolder;
   font-size: 150%;
   margin-bottom: 25px;
+}
+
+.link {
+ text-decoration: none;
+ color: inherit;
 }
 
 .login-form {
