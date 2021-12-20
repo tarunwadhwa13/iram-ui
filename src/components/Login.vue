@@ -51,6 +51,7 @@
 <script lang='ts'>
 import { Options, Vue } from 'vue-class-component'
 import { User, UserFilled, Key } from '@element-plus/icons'
+import { ElNotification } from 'element-plus'
 
 @Options({
   components: {
@@ -60,40 +61,68 @@ import { User, UserFilled, Key } from '@element-plus/icons'
   }
 })
 export default class Login extends Vue {
-  data () {
-    return {
-      rememberMe: false,
-      model: {
-        username: '',
-        password: ''
+  rememberMe = false
+
+  model = {
+    username: '',
+    password: ''
+  }
+
+  rules = {
+    username: [
+      {
+        required: true,
+        message: 'Username is required',
+        trigger: 'blur'
       },
-      rules: {
-        username: [
-          {
-            required: true,
-            message: 'Username is required',
-            trigger: 'blur'
-          },
-          {
-            min: 4,
-            message: 'Username length should be at least 5 characters',
-            trigger: 'blur'
-          }
-        ],
-        password: [
-          {
-            required: true,
-            message: 'Password is required',
-            trigger: 'blur'
-          },
-          {
-            min: 5,
-            message: 'Password length should be at least 5 characters',
-            trigger: 'blur'
-          }
-        ]
+      {
+        min: 4,
+        message: 'Username length should be at least 5 characters',
+        trigger: 'blur'
       }
-    }
+    ],
+    password: [
+      {
+        required: true,
+        message: 'Password is required',
+        trigger: 'blur'
+      },
+      {
+        min: 5,
+        message: 'Password length should be at least 5 characters',
+        trigger: 'blur'
+      }
+    ]
+  }
+
+  handleLogin () {
+    request({
+      url: '',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      content: JSON.stringify({
+        username: this.model.username,
+        password: this.model.password
+      })
+    })
+      .then(
+        (response) => {
+          const result = response.content.toJSON()
+          console.log('Result from Server: ', result)
+          // ignore applicationsettings it's just a kind of localstore in nativescript
+          localStorage.setString('token', result.jwt)
+        },
+        (e) => {
+          ElNotification({
+            title: 'Error',
+            message: e,
+            type: 'error'
+          })
+        }
+      )
+      .then(() => {
+        this.$router.push({ name: 'Home' })
+      })
   }
 }
 </script>

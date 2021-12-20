@@ -43,7 +43,21 @@
           </router-link>
           </el-tooltip>
         </el-menu-item>
+
         <el-menu-item index="4">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="Assigned Alerts"
+            placement="right-start"
+          >
+          <router-link class="link" :to="{name: 'Configure'}">
+            <font-awesome-icon :icon="taskIcon" size="lg"/>
+          </router-link>
+          </el-tooltip>
+        </el-menu-item>
+
+        <el-menu-item index="5">
           <el-tooltip
             class="item"
             effect="dark"
@@ -60,7 +74,7 @@
 import { Options, Vue, setup } from 'vue-class-component'
 import { ref } from 'vue'
 import { Clock, HomeFilled, Setting } from '@element-plus/icons'
-import { faSignOutAlt, faHistory, faCogs, faHome } from '@fortawesome/free-solid-svg-icons'
+import { faSignOutAlt, faHistory, faCogs, faHome, faTasks } from '@fortawesome/free-solid-svg-icons'
 
 @Options({
   components: {
@@ -74,6 +88,7 @@ export default class Sidebar extends Vue {
     logOutIcon = faSignOutAlt
     configureIcon = faCogs
     homeIcon = faHome
+    taskIcon = faTasks
     context = setup(() => {
       const activeIndex = ref('1')
       const handleSelect = (key: any, keyPath: any) => {
