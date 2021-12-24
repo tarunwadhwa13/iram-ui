@@ -1,4 +1,4 @@
-# amp-ui
+# iram-ui
 
 ## Project setup
 ```
