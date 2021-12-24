@@ -7,12 +7,12 @@
       </div>
     <el-form
       class="login-form"
-      :model="model"
+      :model="loginForm"
       :rules="rules"
-      ref="form"
+      ref="loginForm"
     >
       <el-form-item prop="username">
-        <el-input v-model="model.username" placeholder="Username">
+        <el-input v-model="loginForm.username" placeholder="Username">
           <template #prefix>
             <el-icon class="el-input__icon"><user /></el-icon>
           </template>
@@ -20,7 +20,7 @@
       </el-form-item>
       <el-form-item prop="password">
         <el-input
-          v-model="model.password"
+          v-model="loginForm.password"
           placeholder="Password"
           type="password"
         >
@@ -39,8 +39,8 @@
           <el-button
             class="login-button"
             type="primary"
-            native-type="submit"
             block
+            @click="handleLogin('loginForm')"
           >Login</el-button>
         </el-form-item>
     </el-form>
@@ -61,9 +61,10 @@ import { ElNotification } from 'element-plus'
   }
 })
 export default class Login extends Vue {
+  loading = false
   rememberMe = false
 
-  model = {
+  loginForm = {
     username: '',
     password: ''
   }
@@ -95,22 +96,33 @@ export default class Login extends Vue {
     ]
   }
 
-  handleLogin () {
-    request({
-      url: '',
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      content: JSON.stringify({
-        username: this.model.username,
-        password: this.model.password
-      })
+  handleLogin (formName) {
+    console.log(formName)
+    console.log(this.$refs)
+    const formObj: any = this.$refs[formName]
+    // formObj.validate((valid) => {
+    //   if (!valid) {
+    //     ElNotification({
+    //       title: 'Error',
+    //       message: 'Error validating form fields',
+    //       type: 'error'
+    //     })
+    //     return false
+    //   }
+    // })
+    this.loading = true
+    this.axios.post('http://localhost:8000/login/', {
+      username: this.loginForm.username,
+      password: this.loginForm.password
     })
       .then(
         (response) => {
-          const result = response.content.toJSON()
+          const result = response.data.toJSON()
           console.log('Result from Server: ', result)
           // ignore applicationsettings it's just a kind of localstore in nativescript
           localStorage.setString('token', result.jwt)
+          this.loading = false
+          this.$router.push({ name: 'Home' })
         },
         (e) => {
           ElNotification({
@@ -118,11 +130,9 @@ export default class Login extends Vue {
             message: e,
             type: 'error'
           })
+          this.loading = false
         }
       )
-      .then(() => {
-        this.$router.push({ name: 'Home' })
-      })
   }
 }
 </script>
