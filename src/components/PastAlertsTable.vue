@@ -4,13 +4,13 @@
   <el-table
     ref="multipleTable"
     border
+    empty-text="No past alert(s) found in database"
     v-loading="context.loading"
-    empty-text="No active alert(s) found in database"
     element-loading-text="Loading..."
     :element-loading-spinner="context.svg"
     element-loading-svg-view-box="-10, -10, 50, 50"
     element-loading-background="rgba(0, 0, 0, 0.8)"
-    :data="context.activeAlerts.filter(
+    :data="context.pastAlerts.filter(
         (data) =>
           !context.search
             || data.source.toLowerCase().includes(search.toLowerCase())
@@ -24,18 +24,17 @@
 
     <el-table-column prop="source" label="Source" width="120"/>
     <el-table-column prop="createdAt" label="Started At" sortable width="180"/>
-    <el-table-column prop="age" label="Age" width="50" />
+    <el-table-column prop="lastUpdated" label="Last Updated" sortable width="180"/>
     <el-table-column prop="priority" label="Priority" sortable width="100" />
     <el-table-column prop="entity" label="Entity" width="250" />
     <el-table-column prop="subject" label="Subject" />
-    <el-table-column prop="status" label="Status" sortable width="90"/>
-    <el-table-column prop="assignedTo" label="Assigned To" sortable width="140"/>
+    <el-table-column prop="state" label="State" sortable width="90"/>
     <el-table-column label="Action" width="120">
       <el-button type="danger"  size="mini" @click="showDetailModal = true">
         <font-awesome-icon :icon="detailIcon" title="Alert Details"/>
       </el-button>
-      <el-button type="danger"  size="mini" @click="showAssignModal = true">
-        <font-awesome-icon :icon="assignIcon" title="Assign Alert"/>
+      <el-button type="danger"  size="mini" @click="showIRModal = true">
+        <font-awesome-icon :icon="editIcon" title="Check IR"/>
       </el-button>
     </el-table-column>
     <!-- <el-table-column align="right">
@@ -53,27 +52,17 @@ import { Options, Vue, setup } from 'vue-class-component'
 import { reactive, toRefs, watch } from 'vue'
 import gql from 'graphql-tag'
 import { useQuery, useResult } from '@vue/apollo-composable'
-import { faUserPlus, faInfo } from '@fortawesome/free-solid-svg-icons'
+import { faEdit, faInfo } from '@fortawesome/free-solid-svg-icons'
 
-@Options({
-  props: {
-    data_key: {
-      type: String,
-      required: true,
-      validator: value => {
-        return ['active_alerts', 'assigned_alerts', 'past_alerts'].includes(value)
-      }
-    }
-  }
-})
-export default class AlertsTable extends Vue {
-  assignIcon = faUserPlus
-  detailIcon = faInfo
+@Options({})
+export default class PastAlertsTable extends Vue {
+  editIcon = faEdit
   showErrorAlert = false
+  detailIcon = faInfo
   alertMsg = ''
   context = setup(() => {
-    const { result, loading, error } = useQuery(gql`query {
-        activeAlerts {
+    const { result, loading, error } = useQuery(gql`query PastAlerts($timeLimit: Int!) {
+        pastAlerts(timeLimit: $timeLimit) {
           source,
           createdAt,
           lastUpdated,
@@ -83,8 +72,10 @@ export default class AlertsTable extends Vue {
           subject,
           state
         }
-      }`)
-    const activeAlerts = useResult(result, [], data => data.activeAlerts)
+      }`, {
+      timeLimit: 300
+    })
+    const pastAlerts = useResult(result, [], data => data.pastAlerts)
     watch(result, value => {
       console.log(value)
     })
@@ -102,7 +93,7 @@ export default class AlertsTable extends Vue {
         " style="stroke-width: 4px; fill: rgba(0, 0, 0, 0)"/>
       `
     })
-    return { dynProps: toRefs(dynProps), activeAlerts: activeAlerts, loading: loading, error: error }
+    return { dynProps: toRefs(dynProps), pastAlerts: pastAlerts, loading: loading, error: error }
   })
 
   tableRowClassName ({ row, _rowIndex }: { row: any, _rowIndex: number }):string {

@@ -51,7 +51,7 @@
             content="Assigned Alerts"
             placement="right-start"
           >
-          <router-link class="link" :to="{name: 'Configure'}">
+          <router-link class="link" :to="{name: 'AssignedAlerts'}">
             <font-awesome-icon :icon="taskIcon" size="lg"/>
           </router-link>
           </el-tooltip>

@@ -6,9 +6,7 @@
         <Sidebar/>
       </el-aside>
       <el-main>
-        <InfoCards/>
-        <br/>
-        <AlertsTable data_key="active_alerts" />
+        <PastAlertsTable/>
       </el-main>
     </el-container>
   </div>
@@ -16,16 +14,14 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import AlertsTable from '@/components/AlertsTable.vue' // @ is an alias to /src
-import InfoCards from '@/components/InfoCards.vue'
+import PastAlertsTable from '@/components/PastAlertsTable.vue' // @ is an alias to /src
 import Sidebar from '@/components/Sidebar.vue'
 import Navbar from '@/components/Navbar.vue'
 
 @Options({
   components: {
     Sidebar,
-    AlertsTable,
-    InfoCards,
+    PastAlertsTable,
     Navbar
   }
 })

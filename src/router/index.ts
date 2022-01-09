@@ -3,7 +3,7 @@ import Home from '../views/Home.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '/console/home/',
+    path: '/console/alerts/active/',
     name: 'Home',
     component: Home
   },
@@ -21,14 +21,19 @@ const routes: Array<RouteRecordRaw> = [
     component: Home
   },
   {
-    path: '/console/review/',
+    path: '/console/alerts/past/',
     name: 'PastAlerts',
-    component: Home
+    component: () => import(/* webpackChunkName: "pastalerts" */ '../views/PastAlerts.vue')
   },
   {
     path: '/console/configure/',
     name: 'Configure',
     component: () => import(/* webpackChunkName: "configurehome" */ '../views/ConfigureHome.vue')
+  },
+  {
+    path: '/console/alerts/me/',
+    name: 'AssignedAlerts',
+    component: () => import(/* webpackChunkName: "assignedalerts" */ '../views/AssignedAlerts.vue')
   },
   {
     path: '/console/alert-source/add/',

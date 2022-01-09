@@ -7,12 +7,11 @@
       </div>
     <el-form
       class="login-form"
-      :model="loginForm"
-      :rules="rules"
+      :model="loginFormFields"
       ref="loginForm"
     >
       <el-form-item prop="username">
-        <el-input v-model="loginForm.username" placeholder="Username">
+        <el-input v-model="loginFormFields.username" placeholder="Username">
           <template #prefix>
             <el-icon class="el-input__icon"><user /></el-icon>
           </template>
@@ -20,9 +19,10 @@
       </el-form-item>
       <el-form-item prop="password">
         <el-input
-          v-model="loginForm.password"
+          v-model="loginFormFields.password"
           placeholder="Password"
           type="password"
+          show-password
         >
           <template #prefix>
             <el-icon class="el-input__icon"><key /></el-icon>
@@ -50,6 +50,7 @@
 
 <script lang='ts'>
 import { Options, Vue } from 'vue-class-component'
+import { reactive } from 'vue'
 import { User, UserFilled, Key } from '@element-plus/icons'
 import { ElNotification } from 'element-plus'
 
@@ -64,10 +65,10 @@ export default class Login extends Vue {
   loading = false
   rememberMe = false
 
-  loginForm = {
+  loginFormFields = reactive({
     username: '',
     password: ''
-  }
+  })
 
   rules = {
     username: [
@@ -100,20 +101,20 @@ export default class Login extends Vue {
     console.log(formName)
     console.log(this.$refs)
     const formObj: any = this.$refs[formName]
-    // formObj.validate((valid) => {
-    //   if (!valid) {
-    //     ElNotification({
-    //       title: 'Error',
-    //       message: 'Error validating form fields',
-    //       type: 'error'
-    //     })
-    //     return false
-    //   }
-    // })
+    formObj.validate((valid) => {
+      if (!valid) {
+        ElNotification({
+          title: 'Error',
+          message: 'Error validating form fields',
+          type: 'error'
+        })
+        return false
+      }
+    })
     this.loading = true
     this.axios.post('http://localhost:8000/login/', {
-      username: this.loginForm.username,
-      password: this.loginForm.password
+      username: this.loginFormFields.username,
+      password: this.loginFormFields.password
     })
       .then(
         (response) => {

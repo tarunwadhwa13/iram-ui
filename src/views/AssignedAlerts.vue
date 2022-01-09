@@ -6,9 +6,7 @@
         <Sidebar/>
       </el-aside>
       <el-main>
-        <InfoCards/>
-        <br/>
-        <AlertsTable data_key="active_alerts" />
+        <AlertsTable data_key='assigned_alerts' />
       </el-main>
     </el-container>
   </div>
@@ -17,7 +15,6 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
 import AlertsTable from '@/components/AlertsTable.vue' // @ is an alias to /src
-import InfoCards from '@/components/InfoCards.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import Navbar from '@/components/Navbar.vue'
 
@@ -25,7 +22,6 @@ import Navbar from '@/components/Navbar.vue'
   components: {
     Sidebar,
     AlertsTable,
-    InfoCards,
     Navbar
   }
 })
