@@ -16,7 +16,7 @@
             || data.source.toLowerCase().includes(search.toLowerCase())
             || data.entity.toLowerCase().includes(search.toLowerCase())
             || data.subject.toLowerCase().includes(search.toLowerCase())
-            || data.status.toLowerCase().includes(search.toLowerCase())
+            || data.state.toLowerCase().includes(search.toLowerCase())
       )"
     style="width: 100%"
     :row-class-name="tableRowClassName"
@@ -70,11 +70,15 @@ export default class PastAlertsTable extends Vue {
           priority,
           entity,
           subject,
-          state
+          state,
+          assignedTo {
+            username
+          }
         }
       }`, {
       timeLimit: 300
     })
+
     const pastAlerts = useResult(result, [], data => data.pastAlerts)
     watch(result, value => {
       console.log(value)
@@ -97,7 +101,7 @@ export default class PastAlertsTable extends Vue {
   })
 
   tableRowClassName ({ row, _rowIndex }: { row: any, _rowIndex: number }):string {
-    if (row.status.toLowerCase() === 'realarmed') {
+    if (row.state.toLowerCase() === 'realarmed') {
       return 'realarmed-row'
     }
     switch (row.priority) {

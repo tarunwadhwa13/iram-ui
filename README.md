@@ -1,6 +1,17 @@
-# iram-ui
+# IRAM (Incident Response and Alert Management Tool) UI
 
-## Project setup
+This is the frontend repo for IRAM. For backend code, check [IRAM](https://github.com/tarunwadhwa13/iram)
+
+## App Previews
+
+1. Alert Dashboard
+![alert dashboard](previews/alert_dashboard.png?raw=true)
+
+2. Complete Management
+![settings admin](previews/settings_admin.png?raw=true)
+
+## Dev Guide
+### Project setup
 ```
 yarn install
 ```
@@ -19,6 +30,3 @@ yarn build
 ```
 yarn lint
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

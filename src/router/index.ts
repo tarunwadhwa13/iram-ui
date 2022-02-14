@@ -54,6 +54,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/console/configure/extras/',
     name: 'OtherAppSettings',
     component: Home
+  },
+  {
+    path: '/console/subscriptions/',
+    name: 'Subscription',
+    component: () => import(/* webpackChunkName: "subscription" */ '../views/Subscription.vue')
   }
 ]
 

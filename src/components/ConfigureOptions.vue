@@ -16,7 +16,7 @@
 
         <el-row>
             <el-col :key="0" :span="6" :offset="0">
-                <router-link class="link" :to="{name: 'OtherAppSettings'}">
+                <router-link class="link" :to="{name: 'Subscription'}">
                     <el-card shadow="hover" class="">
                     <div>
                         <font-awesome-icon :icon=bellIcon size="2x" />

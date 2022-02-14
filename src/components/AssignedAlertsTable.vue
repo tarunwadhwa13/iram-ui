@@ -5,7 +5,7 @@
     ref="multipleTable"
     border
     v-loading="context.loading"
-    empty-text="No active alert(s) to show"
+    empty-text="No active alert(s) were assigned to you ;)"
     element-loading-text="Loading..."
     :element-loading-spinner="context.svg"
     element-loading-svg-view-box="-10, -10, 50, 50"
@@ -56,14 +56,14 @@ import { useQuery, useResult } from '@vue/apollo-composable'
 import { faUserPlus, faInfo } from '@fortawesome/free-solid-svg-icons'
 
 @Options({})
-export default class AlertsTable extends Vue {
+export default class AssignedAlertsTable extends Vue {
   assignIcon = faUserPlus
   detailIcon = faInfo
   showErrorAlert = false
   alertMsg = ''
   context = setup(() => {
-    const { result, loading, error } = useQuery(gql`query {
-        activeAlerts {
+    const { result, loading, error } = useQuery(gql`query AssignedAlerts($userId: Int!) {
+        assignedAlerts(user: $userId) {
           source,
           createdAt,
           age,
@@ -75,7 +75,9 @@ export default class AlertsTable extends Vue {
             username
           }
         }
-      }`)
+      }`, {
+        userId : 0
+      })
 
     const activeAlerts = useResult(result, [], data => data.activeAlerts)
     const dynProps = reactive({
